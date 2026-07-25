@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net"
 	"net/http"
@@ -25,6 +26,12 @@ import (
 	"github.com/oschwald/geoip2-golang"
 	"github.com/oschwald/maxminddb-golang"
 )
+
+// CHANGE: Added wrapper struct to inject "version" at the JSON top-level
+type RuleSetSource struct {
+	Version int `json:"version"`
+	option.PlainRuleSet
+}
 
 var githubClient *github.Client
 
@@ -250,7 +257,14 @@ func release(source string, destination string, output string, ruleSetOutput str
 		je := json.NewEncoder(outputRuleSet)
 		je.SetEscapeHTML(false)
 		je.SetIndent("", "    ")
-		err = je.Encode(plainRuleSet)
+
+		// CHANGE: Wrapped plainRuleSet with RuleSetSource to include "version": 5
+		ruleSetSource := RuleSetSource{
+			Version:      5,
+			PlainRuleSet: plainRuleSet,
+		}
+		err = je.Encode(ruleSetSource)
+
 		if err != nil {
 			outputRuleSet.Close()
 			return err
@@ -262,7 +276,16 @@ func release(source string, destination string, output string, ruleSetOutput str
 	return nil
 }
 
+// CHANGE: Modernized GitHub Actions output handler
 func setActionOutput(name string, content string) {
+	if githubOutput := os.Getenv("GITHUB_OUTPUT"); githubOutput != "" {
+		f, err := os.OpenFile(githubOutput, os.O_APPEND|os.O_WRONLY, 0600)
+		if err == nil {
+			defer f.Close()
+			f.WriteString(fmt.Sprintf("%s=%s\n", name, content))
+			return
+		}
+	}
 	os.Stdout.WriteString("::set-output name=" + name + "::" + content + "\n")
 }
 

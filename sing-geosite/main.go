@@ -5,6 +5,7 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"os"
@@ -23,6 +24,12 @@ import (
 	"github.com/v2fly/v2ray-core/v5/app/router/routercommon"
 	"google.golang.org/protobuf/proto"
 )
+
+// CHANGE: Added wrapper struct to inject "version" at the JSON top-level
+type RuleSetSource struct {
+	Version int `json:"version"`
+	option.PlainRuleSet
+}
 
 var githubClient *github.Client
 
@@ -68,7 +75,8 @@ func download(release *github.RepositoryRelease) ([]byte, error) {
 		return nil, E.New("geosite asset not found in upstream release ", release.Name)
 	}
 	if geositeChecksumAsset == nil {
-		return nil, E.New("geosite asset not found in upstream release ", release.Name)
+		// CHANGE: Fixed typo in error message (was "geosite asset" instead of "geosite checksum asset")
+		return nil, E.New("geosite checksum asset not found in upstream release ", release.Name)
 	}
 	data, err := get(geositeAsset.BrowserDownloadURL)
 	if err != nil {
@@ -249,7 +257,14 @@ func generate(release *github.RepositoryRelease, output string, cnOutput string,
 		je := json.NewEncoder(outputRuleSet)
 		je.SetEscapeHTML(false)
 		je.SetIndent("", "    ")
-		err = je.Encode(plainRuleSet)
+
+		// CHANGE: Encapsulated plainRuleSet into RuleSetSource with version: 5
+		ruleSetSource := RuleSetSource{
+			Version:      5, // Specify target rule-set source format version
+			PlainRuleSet: plainRuleSet,
+		}
+		err = je.Encode(ruleSetSource)
+
 		if err != nil {
 			outputRuleSet.Close()
 			return err
@@ -259,7 +274,16 @@ func generate(release *github.RepositoryRelease, output string, cnOutput string,
 	return nil
 }
 
+// CHANGE: Updated GitHub Actions output handling to write to $GITHUB_OUTPUT with standard stdout fallback
 func setActionOutput(name string, content string) {
+	if githubOutput := os.Getenv("GITHUB_OUTPUT"); githubOutput != "" {
+		f, err := os.OpenFile(githubOutput, os.O_APPEND|os.O_WRONLY, 0600)
+		if err == nil {
+			defer f.Close()
+			f.WriteString(fmt.Sprintf("%s=%s\n", name, content))
+			return
+		}
+	}
 	os.Stdout.WriteString("::set-output name=" + name + "::" + content + "\n")
 }
 
