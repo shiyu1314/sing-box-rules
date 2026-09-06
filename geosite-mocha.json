@@ -1,0 +1,9 @@
+{
+    "version": 5,
+    "rules": [
+        {
+            "domain": "mochajs.org",
+            "domain_suffix": ".mochajs.org"
+        }
+    ]
+}

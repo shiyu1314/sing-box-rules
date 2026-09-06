@@ -1,0 +1,17 @@
+{
+    "version": 5,
+    "rules": [
+        {
+            "domain": [
+                "myteamspeak.com",
+                "teamspeak.com",
+                "teamspeak-services.com"
+            ],
+            "domain_suffix": [
+                ".myteamspeak.com",
+                ".teamspeak.com",
+                ".teamspeak-services.com"
+            ]
+        }
+    ]
+}
