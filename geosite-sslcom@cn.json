@@ -1,0 +1,9 @@
+{
+    "version": 5,
+    "rules": [
+        {
+            "domain": "sslcom.cn",
+            "domain_suffix": ".sslcom.cn"
+        }
+    ]
+}
