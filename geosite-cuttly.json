@@ -1,0 +1,9 @@
+{
+    "version": 5,
+    "rules": [
+        {
+            "domain": "cutt.ly",
+            "domain_suffix": ".cutt.ly"
+        }
+    ]
+}

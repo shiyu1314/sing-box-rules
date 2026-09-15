@@ -1,0 +1,9 @@
+{
+    "version": 5,
+    "rules": [
+        {
+            "domain": "easebar.com",
+            "domain_suffix": ".easebar.com"
+        }
+    ]
+}
