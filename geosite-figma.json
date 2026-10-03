@@ -1,0 +1,9 @@
+{
+    "version": 5,
+    "rules": [
+        {
+            "domain": "figma.com",
+            "domain_suffix": ".figma.com"
+        }
+    ]
+}
