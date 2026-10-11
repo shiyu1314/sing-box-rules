@@ -1,0 +1,9 @@
+{
+    "version": 5,
+    "rules": [
+        {
+            "domain": "trustwave.com",
+            "domain_suffix": ".trustwave.com"
+        }
+    ]
+}
