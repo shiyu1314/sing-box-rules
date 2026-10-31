@@ -1,0 +1,9 @@
+{
+    "version": 5,
+    "rules": [
+        {
+            "domain": "snapads.com",
+            "domain_suffix": ".snapads.com"
+        }
+    ]
+}
