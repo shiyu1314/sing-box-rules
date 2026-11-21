@@ -1,0 +1,9 @@
+{
+    "version": 5,
+    "rules": [
+        {
+            "domain": "imagebam.com",
+            "domain_suffix": ".imagebam.com"
+        }
+    ]
+}

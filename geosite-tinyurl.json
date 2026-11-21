@@ -1,0 +1,9 @@
+{
+    "version": 5,
+    "rules": [
+        {
+            "domain": "tinyurl.com",
+            "domain_suffix": ".tinyurl.com"
+        }
+    ]
+}

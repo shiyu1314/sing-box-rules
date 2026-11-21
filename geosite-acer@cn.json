@@ -1,0 +1,9 @@
+{
+    "version": 5,
+    "rules": [
+        {
+            "domain": "acer.com.cn",
+            "domain_suffix": ".acer.com.cn"
+        }
+    ]
+}
