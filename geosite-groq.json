@@ -1,0 +1,9 @@
+{
+    "version": 5,
+    "rules": [
+        {
+            "domain": "groq.com",
+            "domain_suffix": ".groq.com"
+        }
+    ]
+}

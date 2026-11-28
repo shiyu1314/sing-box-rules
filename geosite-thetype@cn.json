@@ -1,0 +1,9 @@
+{
+    "version": 5,
+    "rules": [
+        {
+            "domain": "thetype.cloud",
+            "domain_suffix": ".thetype.cloud"
+        }
+    ]
+}
